@@ -2,32 +2,45 @@
 
 {% block content %}
   <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'taxi:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+    Username: {{ worker.username }}
+    <a href="{% url 'task_manager:worker-delete' pk=worker.id %}"
+       class="btn btn-danger link-to-page">
       Delete
     </a>
 
-    <a href="{% url 'taxi:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
-      Update license number
+    <a href="{% url 'task_manager:worker-update' pk=worker.id %}"
+       class="btn btn-secondary link-to-page">
+      Update
     </a>
   </h1>
 
-  <p><strong>First name:</strong> {{ driver.first_name }}</p>
-  <p><strong>Last name:</strong> {{ driver.last_name }}</p>
-  <p><strong>License number:</strong> {{ driver.license_number }}</p>
-  <p><strong>Is staff:</strong> {{ driver.is_staff }}</p>
+  <p><strong>First name:</strong> {{ worker.first_name }}</p>
+  <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+  <p><strong>Position:</strong> {{ worker.position }}</p>
+  <p><strong>Is staff:</strong> {{ worker.is_staff }}</p>
 
   <div class="ml-3">
-    <h4>Cars</h4>
+    <h4 style="text-align: center">Tasks</h4>
 
-    {% for car in driver.cars.all %}
-        <hr>
-        <p><strong>Model:</strong> {{ car.model }}</p>
-        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Deadline</th>
+        <th>Priority</th>
+        <th>Type</th>
+      </tr>
+    {% for task in worker.tasks.all %}
+      <tr>
+      <td> {{ task.id }} </td>
+      <td> {{ task.name }}</td>
+      <td> {{ task.deadline }}</td>
+      <td> {{ task.priority }}</td>
+      <td> {{ task.task_type }}</td>
+      {#        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>#}
 
     {% empty %}
-      <p>No cars!</p>
+      <p>No task!</p>
     {% endfor %}
   </div>
 {% endblock %}

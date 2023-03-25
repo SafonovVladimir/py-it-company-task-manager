@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from task_manager.forms import TaskNameSearchForm
+from task_manager.forms import TaskNameSearchForm, WorkerPositionUpdateForm
 from task_manager.models import Task, Worker
 
 
@@ -79,3 +79,14 @@ class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
+
+
+class WorkerPositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerPositionUpdateForm
+    success_url = reverse_lazy("task_manager:task-list")
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    success_url = reverse_lazy("task_manager:task-list")
