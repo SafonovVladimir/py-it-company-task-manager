@@ -27,12 +27,14 @@ class Position(models.Model):
     def __str__(self):
         return self.name
 
+
 PRIORITY_CHOICES = (
     ("Urgent", "Urgent"),
     ("High", "High"),
     ("Medium", "Medium"),
     ("Low", "Low")
 )
+
 
 class Task(models.Model):
     name = models.CharField(max_length=63)
@@ -46,6 +48,9 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("task_manager:task-detail", kwargs={"pk": self.pk})
 
 
 class TaskType(models.Model):

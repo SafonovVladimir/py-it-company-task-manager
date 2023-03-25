@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -40,17 +41,36 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         name = self.request.GET.get("name", "")
 
         context["search_form"] = TaskNameSearchForm(initial={
-            "name": name
+            "name": name,
         })
+
         return context
 
     def get_queryset(self):
         user = self.request.user
         queryset = Task.objects.filter(assignees=user.id).prefetch_related(
-            "assignees")
+            "assignees").select_related("task_type")
         form = TaskNameSearchForm(self.request.GET)
 
+        order_by = self.request.GET.get("order_by")
+        is_completed = self.request.GET.get("is_completed")
+        priority = self.request.GET.get("priority")
+
         if form.is_valid():
+            if order_by:
+                return queryset.filter(
+                    name__icontains=form.cleaned_data["name"]
+                ).order_by(order_by)
+            if is_completed:
+                return queryset.filter(
+                    name__icontains=form.cleaned_data["name"],
+                    is_completed=is_completed
+                )
+            if priority:
+                return queryset.filter(
+                    name__icontains=form.cleaned_data["name"],
+                    priority=priority
+                )
             return queryset.filter(
                 name__icontains=form.cleaned_data["name"]
             )
@@ -63,7 +83,7 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     fields = "__all__"
-    template_name = "task_manager/task_list.html"
+    # template_name = "task_manager/task_list.html"
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -79,6 +99,7 @@ class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
+    queryset = Worker.objects.prefetch_related("tasks")
 
 
 class WorkerPositionUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -90,3 +111,19 @@ class WorkerPositionUpdateView(LoginRequiredMixin, generic.UpdateView):
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Worker
     success_url = reverse_lazy("task_manager:task-list")
+
+
+@login_required
+def toggle_complete_task(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    if task.is_completed:
+        task.is_completed = 0
+    else:
+        task.is_completed = 1
+
+    task.save()
+
+    return HttpResponseRedirect(
+        reverse_lazy("task_manager:task-detail", args=[pk])
+    )

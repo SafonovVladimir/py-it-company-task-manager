@@ -12,7 +12,7 @@ from task_manager.views import (
     TaskDeleteView,
     WorkerDetailView,
     WorkerPositionUpdateView,
-    WorkerDeleteView,
+    WorkerDeleteView, toggle_complete_task,
 )
 
 urlpatterns = [
@@ -23,10 +23,16 @@ urlpatterns = [
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/<int:pk>/update/",
          TaskUpdateView.as_view(),
-         name="task-update"),
+         name="task-update"
+         ),
     path("tasks/<int:pk>/delete/",
          TaskDeleteView.as_view(),
-         name="task-delete"),
+         name="task-delete"
+         ),
+    path("tasks/<int:pk>/toggle_complete/",
+         toggle_complete_task,
+         name="toggle-complete-task"
+         ),
 
     path("worker/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"),
     path(

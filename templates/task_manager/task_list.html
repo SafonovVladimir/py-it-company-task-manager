@@ -1,17 +1,47 @@
 {% extends "base.html" %}
+{% load query_transform %}
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
+  <h1 style="text-align: center">
     Task List
     <a href="{% url 'task_manager:task-create' %}"
        class="btn btn-primary link-to-page">
       Create
     </a>
   </h1>
+  <br>
   <form action="" method="get" class="form-inline">
     {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🔎">
+    <input class="btn btn-secondary" type="submit" value="🔎">&emsp;&emsp;
+    Completed:&nbsp;
+    <label>
+      <input type="checkbox" name="complete_yes" value="complete_yes"
+             onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
+    </label>Yes&nbsp;
+    <label>
+      <input type="checkbox" name="complete_no" value="complete_no"
+             onchange='window.location.href="?{% url_replace request 'is_completed' 'False' %}"'>
+    </label>No&emsp;&emsp;
+    Priority:&nbsp;
+    <label>
+      <input type="checkbox" name="urgent" value="urgent"
+             onchange='window.location.href="?{% url_replace request 'priority' 'Urgent' %}"'>
+    </label>Urgent&nbsp;
+    <label>
+      <input type="checkbox" name="high" value="high"
+             onchange='window.location.href="?{% url_replace request 'priority' 'High' %}"'>
+    </label>High&nbsp;
+    <label>
+      <input type="checkbox" name="medium" value="medium"
+             onchange='window.location.href="?{% url_replace request 'priority' 'Medium' %}"'>
+    </label>Medium&nbsp;
+    <label>
+      <input type="checkbox" name="low" value="low"
+             onchange='window.location.href="?{% url_replace request 'priority' 'Low' %}"'>
+    </label>Low&emsp;&emsp;
+    <a href="{% url 'task_manager:task-list' %}">Reset all
+      filters</a>
   </form>
   <br>
 
@@ -20,30 +50,29 @@
       <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Deadline</th>
-        <th>Priority</th>
-        <th>Type</th>
+        <th><a href="?{% url_replace request 'order_by' 'deadline' %}"
+               style="text-decoration: none; color: black">Deadline</a></th>
+        <th><a href="?{% url_replace request 'order_by' 'priority' %}"
+               style="text-decoration: none; color: black">Priority</a></th>
+        <th><a href="?{% url_replace request 'order_by' 'task_type' %}"
+               style="text-decoration: none; color: black">Type</a></th>
+        <th><a href="?{% url_replace request 'order_by' 'is_completed' %}"
+               style="text-decoration: none; color: black">Completed</a></th>
       </tr>
 
       {% for task in task_list %}
         <tr>
           <td>{{ task.id }}</td>
           <td><a href="{% url 'task_manager:task-detail' pk=task.id %}">
-              {{ task.name }}</a></td>
+            {{ task.name }}</a></td>
           <td>{{ task.deadline }}</td>
           <td>{{ task.priority }}</td>
           <td>{{ task.task_type }}</td>
-          {#          <td>#}
-          {#            <a href="{% url 'taxi:manufacturer-update' pk=manufacturer.id %}">#}
-          {#              Update#}
-          {#            </a>#}
-          {#          </td>#}
-          {#          <td>#}
-          {#            <a style="color: red"#}
-          {#               href="{% url 'taxi:manufacturer-delete' pk=manufacturer.id %}">#}
-          {#              Delete#}
-          {#            </a>#}
-          {#          </td>#}
+          <td><label>
+            <input type="checkbox" name="completed_check"
+                   onclick="return false;"
+                {% if task.is_completed %} checked {% endif %}>
+          </label></td>
         </tr>
       {% endfor %}
     </table>
