@@ -34,6 +34,10 @@ class TasksListView(LoginRequiredMixin, generic.ListView):
     # paginate_by = 10
 
 
+class TasksDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
+
+
 class TasksCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     fields = "__all__"
