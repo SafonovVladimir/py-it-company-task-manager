@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap4",
     "crispy_forms",
     "task_manager",
+    "taggit",
 ]
 
 MIDDLEWARE = [

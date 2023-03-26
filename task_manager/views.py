@@ -33,7 +33,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     context_object_name = "task_list"
     template_name = "task_manager/task_list.html"
-    paginate_by = 10
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
@@ -83,7 +83,6 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     fields = "__all__"
-    # template_name = "task_manager/task_list.html"
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):

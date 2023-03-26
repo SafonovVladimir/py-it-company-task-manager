@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 class Worker(AbstractUser):
@@ -45,6 +46,7 @@ class Task(models.Model):
     priority = models.CharField(max_length=6, choices=PRIORITY_CHOICES)
     task_type = models.ForeignKey("TaskType", on_delete=models.DO_NOTHING)
     assignees = models.ManyToManyField(Worker, related_name="tasks")
+    tags = TaggableManager()
 
     def __str__(self):
         return self.name
