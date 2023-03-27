@@ -11,14 +11,13 @@
 
   <br>
 
-  <li class="list-group-item"><a href="{% url 'task_manager:index' %}">Home</a>
+  <li class="list-group-item">
+    <a href="{% url 'task_manager:index' %}">Home</a>
   </li>
-  <li class="list-group-item"><a href="{% url 'task_manager:task-list' %}">All
-    tasks</a>
+  <li class="list-group-item">
+    <a href="{% url 'task_manager:task-list' %}">All tasks</a>
   </li>
-  {#  <li class="list-group-item"><a#}
-  {#      href="{% url 'task_manager:urgent-task-list' %}">Urgent tasks</a></li>#}
-  {#  <li class="list-group-item"><a#}
-  {#      href="{% url 'task_manager:high-task-list' %}">High priority tasks</a>#}
-  {#  </li>#}
+  <li class="list-group-item">
+    <a href="{% url 'task_manager:tag-list' %}">Tags</a>
+  </li>
 </ul>

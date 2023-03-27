@@ -12,7 +12,7 @@ from task_manager.forms import (
     WorkerCreationForm,
     TaskForm
 )
-from task_manager.models import Task, Worker
+from task_manager.models import Task, Worker, Tag
 
 
 def index(request):
@@ -137,3 +137,24 @@ def toggle_complete_task(request, pk):
     return HttpResponseRedirect(
         reverse_lazy("task_manager:task-detail", args=[pk])
     )
+
+
+class TagListView(LoginRequiredMixin, generic.ListView):
+    model = Tag
+
+
+class TagCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Tag
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:tag-list")
+
+
+class TagUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Tag
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:tag-list")
+
+
+class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Tag
+    success_url = reverse_lazy("task_manager:tag-list")

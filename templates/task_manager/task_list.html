@@ -4,7 +4,7 @@
 
 {% block content %}
   <h1 style="text-align: center">
-    Task List
+    Tasks List
     <a href="{% url 'task_manager:task-create' %}"
        class="btn btn-primary link-to-page">
       Create
@@ -16,44 +16,43 @@
     <input class="btn btn-secondary" type="submit" value="🔎">&emsp;&emsp;
     <b>Completed:</b>&nbsp;
     <label>
-      {% if 'is_completed=True' in request.GET %}
-        <input id="complete_yes" type="checkbox" name="complete_yes"
-               value="complete_yes" checked
-               onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
-      {% else %}
-        <input id="complete_yes" type="checkbox" name="complete_yes"
-               value="complete_yes"
-               onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
-      {% endif %}
+      <input id="complete_yes" type="checkbox" name="complete_yes"
+             value="complete_yes"
+             onchange='window.location.href=
+                 "?{% url_replace request 'is_completed' 'True' %}"'
+          {% if request.GET.is_completed == 'True' %} checked {% endif %}>
     </label>Yes&nbsp;
-
-    {#    {% if 'is_completed=True' in request.GET %}#}
-    {#      <input id="complete_yes" checked>#}
-    {#    {% elif 'is_completed=False' in request.GET %}#}
-    {#    {% else %}#}
-    {#      <input id="complete_yes" checked="False">#}
-    {#    {% endif %}#}
 
     <label>
       <input type="checkbox" name="complete_no" value="complete_no"
-             onchange='window.location.href="?{% url_replace request 'is_completed' 'False' %}"'>
+             onchange='window.location.href=
+                 "?{% url_replace request 'is_completed' 'False' %}"'
+          {% if request.GET.is_completed == 'False' %} checked {% endif %}>
     </label>No&emsp;&emsp;
     <b>Priority:</b>&nbsp;
     <label>
       <input type=checkbox name="urgent" value="urgent"
-             onchange='window.location.href="?{% url_replace request 'priority' 'Urgent' %}"'>
+             onchange='window.location.href=
+                 "?{% url_replace request 'priority' 'Urgent' %}"'
+          {% if request.GET.priority == 'Urgent' %} checked {% endif %}>
     </label>Urgent&nbsp;
     <label>
       <input type="checkbox" name="high" value="high"
-             onchange='window.location.href="?{% url_replace request 'priority' 'High' %}"'>
+             onchange='window.location.href=
+                 "?{% url_replace request 'priority' 'High' %}"'
+          {% if request.GET.priority == 'High' %} checked {% endif %}>
     </label>High&nbsp;
     <label>
       <input type="checkbox" name="medium" value="medium"
-             onchange='window.location.href="?{% url_replace request 'priority' 'Medium' %}"'>
+             onchange='window.location.href=
+                 "?{% url_replace request 'priority' 'Medium' %}"'
+          {% if request.GET.priority == 'Medium' %} checked {% endif %}>
     </label>Medium&nbsp;
     <label>
       <input type="checkbox" name="low" value="low"
-             onchange='window.location.href="?{% url_replace request 'priority' 'Low' %}"'>
+             onchange='window.location.href=
+                 "?{% url_replace request 'priority' 'Low' %}"'
+          {% if request.GET.priority == 'Low' %} checked {% endif %}>
     </label>Low&emsp;&emsp;
     <a href="{% url 'task_manager:task-list' %}">Reset all
       filters</a>
@@ -72,7 +71,6 @@
         <th><a href="?{% url_replace request 'order_by' 'task_type' %}"
                style="text-decoration: none; color: black">Type</a></th>
         <th>Completed</th>
-        <th>Tags</th>
       </tr>
 
       {% for task in task_list %}
@@ -84,15 +82,10 @@
           <td>{{ task.priority }}</td>
           <td>{{ task.task_type }}</td>
           <td><label>
-            <input type="checkbox" name="completed_check"
+            <input type="checkbox" name="completed_radio"
                    onclick="return false;"
                 {% if task.is_completed %} checked {% endif %}>
           </label></td>
-          <td>
-            {% for tag in  task.tags.all %}
-              {{ tag }}
-            {% endfor %}
-          </td>
         </tr>
       {% endfor %}
     </table>

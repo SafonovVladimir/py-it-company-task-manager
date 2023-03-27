@@ -1,7 +1,4 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
 
 from task_manager.views import (
     index,
@@ -13,7 +10,12 @@ from task_manager.views import (
     WorkerCreateView,
     WorkerDetailView,
     WorkerPositionUpdateView,
-    WorkerDeleteView, toggle_complete_task,
+    WorkerDeleteView,
+    toggle_complete_task,
+    TagListView,
+    TagCreateView,
+    TagUpdateView,
+    TagDeleteView,
 )
 
 urlpatterns = [
@@ -47,6 +49,16 @@ urlpatterns = [
         WorkerDeleteView.as_view(),
         name="worker-delete",
     ),
+    path("tags/", TagListView.as_view(), name="tag-list"),
+    path("tags/create/", TagCreateView.as_view(), name="tag-create"),
+    path("tags/<int:pk>/update/",
+         TagUpdateView.as_view(),
+         name="tag-update"
+         ),
+    path("tags/<int:pk>/delete/",
+         TagDeleteView.as_view(),
+         name="tag-delete"
+         ),
 
 ]
 
