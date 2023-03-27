@@ -1,8 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import SelectDateWidget
 
-from task_manager.models import Worker, Task
+from task_manager.models import Worker, Task, Tag
 
 
 class TaskNameSearchForm(forms.Form):
@@ -31,6 +32,18 @@ class WorkerPositionUpdateForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
+    assignees = forms.ModelMultipleChoiceField(
+        queryset=get_user_model().objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = Task
         fields = [
