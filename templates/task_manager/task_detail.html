@@ -28,14 +28,21 @@
 
   <p><strong>Description:</strong> {{ task.description }}</p>
   <p><strong>Deadline:</strong> {{ task.deadline }}</p>
-  <p><strong>Priority:</strong> {{ task.priority }}</p>
+  <p><strong>Priority:</strong>
+    {% if task.priority == 'Urgent' %}
+      <span style="color: red; font-weight: bold;">{{ task.priority }}</span>
+    {% elif task.priority == 'High' %}
+      <span style="font-weight: bold;">{{ task.priority }}</span>
+    {% else %}
+      <span>{{ task.priority }}</span>
+    {% endif %}
+  </p>
   <p><strong>Type:</strong> {{ task.task_type }}</p>
   <p><strong>Is completed?</strong> {{ task.is_completed }}</p>
   <p><strong>Tags:</strong>
-  {% for tag in  task.tags.all %}
-    {{ tag }}
-  {% endfor %}
-{#  <p><strong>Tags</strong> {{ task.tags. }}</p>#}
+    {% for tag in  task.tags.all %}
+      {{ tag }}
+    {% endfor %}
 
   <div class="ml-3">
     <h4 style="text-align: center">Workers</h4>

@@ -54,8 +54,7 @@
                  "?{% url_replace request 'priority' 'Low' %}"'
           {% if request.GET.priority == 'Low' %} checked {% endif %}>
     </label>Low&emsp;&emsp;
-    <a href="{% url 'task_manager:task-list' %}">Reset all
-      filters</a>
+    <a href="{% url 'task_manager:task-list' %}">Reset filters</a>
   </form>
   <br>
 
@@ -79,7 +78,13 @@
           <td><a href="{% url 'task_manager:task-detail' pk=task.id %}">
             {{ task.name }}</a></td>
           <td>{{ task.deadline }}</td>
-          <td>{{ task.priority }}</td>
+          {% if task.priority == 'Urgent' %}
+            <td style="color: red; font-weight: bold;">{{ task.priority }}</td>
+          {% elif task.priority == 'High' %}
+            <td style="font-weight: bold;">{{ task.priority }}</td>
+          {% else %}
+            <td>{{ task.priority }}</td>
+          {% endif %}
           <td>{{ task.task_type }}</td>
           <td><label>
             <input type="checkbox" name="completed_radio"
