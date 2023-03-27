@@ -10,6 +10,7 @@ from task_manager.views import (
     TaskDetailView,
     TaskUpdateView,
     TaskDeleteView,
+    WorkerCreateView,
     WorkerDetailView,
     WorkerPositionUpdateView,
     WorkerDeleteView, toggle_complete_task,
@@ -35,6 +36,7 @@ urlpatterns = [
          ),
 
     path("worker/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"),
+    path("worker/create/", WorkerCreateView.as_view(), name="worker-create"),
     path(
         "worker/<int:pk>/update/",
         WorkerPositionUpdateView.as_view(),

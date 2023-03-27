@@ -6,7 +6,12 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
-from task_manager.forms import TaskNameSearchForm, WorkerPositionUpdateForm
+from task_manager.forms import (
+    TaskNameSearchForm,
+    WorkerPositionUpdateForm,
+    WorkerCreationForm,
+    TaskForm
+)
 from task_manager.models import Task, Worker
 
 
@@ -82,7 +87,8 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
-    fields = "__all__"
+    # fields = "__all__"
+    form_class = TaskForm
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -94,6 +100,11 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("task_manager:task-list")
+
+
+class WorkerCreateView(generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
@@ -117,9 +128,9 @@ def toggle_complete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
     if task.is_completed:
-        task.is_completed = 0
+        task.is_completed = False
     else:
-        task.is_completed = 1
+        task.is_completed = True
 
     task.save()
 

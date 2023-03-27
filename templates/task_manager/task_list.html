@@ -16,16 +16,31 @@
     <input class="btn btn-secondary" type="submit" value="🔎">&emsp;&emsp;
     <b>Completed:</b>&nbsp;
     <label>
-      <input type="checkbox" name="complete_yes" value="complete_yes"
-             onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
+      {% if 'is_completed=True' in request.GET %}
+        <input id="complete_yes" type="checkbox" name="complete_yes"
+               value="complete_yes" checked
+               onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
+      {% else %}
+        <input id="complete_yes" type="checkbox" name="complete_yes"
+               value="complete_yes"
+               onchange='window.location.href="?{% url_replace request 'is_completed' 'True' %}"'>
+      {% endif %}
     </label>Yes&nbsp;
+
+    {#    {% if 'is_completed=True' in request.GET %}#}
+    {#      <input id="complete_yes" checked>#}
+    {#    {% elif 'is_completed=False' in request.GET %}#}
+    {#    {% else %}#}
+    {#      <input id="complete_yes" checked="False">#}
+    {#    {% endif %}#}
+
     <label>
       <input type="checkbox" name="complete_no" value="complete_no"
              onchange='window.location.href="?{% url_replace request 'is_completed' 'False' %}"'>
     </label>No&emsp;&emsp;
     <b>Priority:</b>&nbsp;
     <label>
-      <input type="checkbox" name="urgent" value="urgent"
+      <input type=checkbox name="urgent" value="urgent"
              onchange='window.location.href="?{% url_replace request 'priority' 'Urgent' %}"'>
     </label>Urgent&nbsp;
     <label>
@@ -57,6 +72,7 @@
         <th><a href="?{% url_replace request 'order_by' 'task_type' %}"
                style="text-decoration: none; color: black">Type</a></th>
         <th>Completed</th>
+        <th>Tags</th>
       </tr>
 
       {% for task in task_list %}
@@ -72,6 +88,11 @@
                    onclick="return false;"
                 {% if task.is_completed %} checked {% endif %}>
           </label></td>
+          <td>
+            {% for tag in  task.tags.all %}
+              {{ tag }}
+            {% endfor %}
+          </td>
         </tr>
       {% endfor %}
     </table>
